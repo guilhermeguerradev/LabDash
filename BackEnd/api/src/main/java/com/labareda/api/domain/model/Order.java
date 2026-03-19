@@ -1,30 +1,44 @@
 package com.labareda.api.domain.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "clients")
+@Table(name = "orders")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 @EqualsAndHashCode(of = "id")
-public class Client {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
+    @NotNull
+    @ManyToOne
+    @JoinColumn (name = "work_id")
+    private Company company;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn (name = "client_id")
+    private Client client;
 
     @NotNull
     @Positive
-    @Column(name = "unit_price", precision = 10, scale = 2)
-    private BigDecimal unitPrice;
+    private int quantity;
+
+    @NotNull
+    private BigDecimal totalValue;
+
+    @NotNull
+    private LocalDate date;
 }
