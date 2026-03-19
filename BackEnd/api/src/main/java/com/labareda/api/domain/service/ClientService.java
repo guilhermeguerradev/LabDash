@@ -34,7 +34,24 @@ public class ClientService {
         return clientRepository.findById(id);
     }
 
+    public Client update(Long id, ClientRequestDTO dto) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        client.setName(dto.name());
+        client.setUnitPrice(dto.unitPrice());
+
+        return clientRepository.save(client);
+    }
+
     public List<Client> findAll() {
         return clientRepository.findAll();
+    }
+
+    public void delete(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        clientRepository.delete(client);
     }
 }
