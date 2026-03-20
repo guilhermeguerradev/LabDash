@@ -18,22 +18,21 @@ public class ClientService {
 
     @Transactional
     public Client save(ClientRequestDTO dto) {
-        Client client = new Client();
+        clientRepository.findByNameIgnoreCase(dto.name())
+                .ifPresent(c -> { throw new RuntimeException("Cliente já cadastrado"); });
 
+        Client client = new Client();
         client.setName(dto.name());
         client.setUnitPrice(dto.unitPrice());
-
-        if (clientRepository.findByNameIgnoreCase(dto.name()).isPresent()) {
-            throw new RuntimeException("Cliente já cadastrado");
-        }
-
         return clientRepository.save(client);
     }
 
-    public Optional<Client> findById(Long id) {
-        return clientRepository.findById(id);
+    public Client findById(Long id) {
+        return clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
+    @Transactional
     public Client update(Long id, ClientRequestDTO dto) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -48,10 +47,11 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    @Transactional
     public void delete(Long id) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-
-        clientRepository.delete(client);
+        if (!clientRepository.existsById(id)) {
+            throw new RuntimeException("Cliente não encontrado");
+        }
+        clientRepository.deleteById(id);
     }
 }
