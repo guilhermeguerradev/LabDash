@@ -27,6 +27,10 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    public List<Client> findByName(String name) {
+        return clientRepository.findByNameContainingIgnoreCase(name);
+    }
+
     public Client findByIdOrThrow(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

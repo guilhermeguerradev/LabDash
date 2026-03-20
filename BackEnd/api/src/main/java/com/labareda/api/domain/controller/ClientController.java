@@ -21,7 +21,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<List<ClientResponseDTO>> findAll() {
         List<ClientResponseDTO> response = clientService.findAll().stream()
-                .map(c -> ClientResponseDTO.fromEntity(c) ).toList();
+                .map(ClientResponseDTO::fromEntity).toList();
         return ResponseEntity.ok(response);
     }
 
@@ -29,6 +29,13 @@ public class ClientController {
     public ResponseEntity<ClientResponseDTO> findById(@PathVariable Long id) {
         Client response = clientService.findByIdOrThrow(id);
         return ResponseEntity.ok(ClientResponseDTO.fromEntity(response));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ClientResponseDTO>> findByName(@RequestParam String name) {
+        List<ClientResponseDTO> response = clientService.findByName(name)
+                .stream().map(ClientResponseDTO::fromEntity).toList();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package com.labareda.api.domain.service;
 
+import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.model.Company;
 import com.labareda.api.domain.repository.CompanyRepository;
 import com.labareda.api.dto.company.CompanyRequestDTO;
@@ -24,6 +25,10 @@ public class CompanyService {
         company.setName(dto.name());
 
         return companyRepository.save(company);
+    }
+
+    public List<Company> findByName(String name) {
+        return companyRepository.findByNameContainingIgnoreCase(name);
     }
 
     @Transactional
