@@ -1,4 +1,4 @@
-package com.labareda.api.dto;
+package com.labareda.api.dto.dailyCounterSale;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;

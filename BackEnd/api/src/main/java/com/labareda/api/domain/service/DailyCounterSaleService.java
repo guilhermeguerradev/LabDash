@@ -3,23 +3,64 @@ package com.labareda.api.domain.service;
 
 import com.labareda.api.domain.model.DailyCounterSale;
 import com.labareda.api.domain.repository.DailyCounterSaleRepository;
-import com.labareda.api.dto.DailyCounterSaleRequestDTO;
+import com.labareda.api.dto.dailyCounterSale.DailyCounterSaleRequestDTO;
 import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@Entity
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
 @RequiredArgsConstructor
 public class DailyCounterSaleService {
 
     private final DailyCounterSaleRepository repository;
 
-    public DailyCounterSaleRequestDTO save(DailyCounterSaleRequestDTO dto) {
+    public DailyCounterSale save(DailyCounterSaleRequestDTO dto) {
 
-        repository.findByDate(dto.date()).ifPresent(c -> { throw new RuntimeException("Venda já cadastrada!");});
+        repository.findByDate(dto.date())
+                .ifPresent(c -> { throw new RuntimeException("Venda já cadastrada!");});
 
         DailyCounterSale sale  = new DailyCounterSale();
 
-        // terminar
+        sale.setDate(dto.date());
+        sale.setCardAmount(dto.cardAmount());
+        sale.setCashAmount(dto.cashAmount());
+        sale.setPixAmount(dto.pixAmount());
+
+        return repository.save(sale);
+    }
+
+    public List<DailyCounterSale> findAll() {
+        return repository.findAll();
+    }
+
+    public DailyCounterSale findByIdOrThrow(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada!"));
+    }
+
+    public DailyCounterSale findByDate(LocalDate date) {
+        return repository.findByDate(date).orElse(null);
+    }
+
+    public DailyCounterSale update(Long id,DailyCounterSaleRequestDTO dto) {
+        DailyCounterSale sale = findByIdOrThrow(id);
+
+        sale.setDate(dto.date());
+        sale.setCardAmount(dto.cardAmount());
+        sale.setCashAmount(dto.cashAmount());
+        sale.setPixAmount(dto.pixAmount());
+
+        return repository.save(sale);
+    }
+
+    public void delete(Long id) {
+        if(!repository.existsById(id)) {
+            throw new RuntimeException("Venda não encontrada!");
+        }
+        repository.deleteById(id);
     }
 
 }
