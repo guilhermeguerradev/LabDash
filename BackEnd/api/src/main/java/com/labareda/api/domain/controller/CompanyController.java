@@ -51,7 +51,7 @@ public class CompanyController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CompanyResponseDTO> findById(@PathVariable Long id) {
         Company response = companyService.findByIdOrThrow(id);
         return ResponseEntity.ok(CompanyResponseDTO.fromEntity(response));

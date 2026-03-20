@@ -59,9 +59,8 @@ public class OrderService {
         return orderRepository.findByCompanyNameIgnoreCase(companyName);
     }
 
-    public Map<LocalDate, List<Order>> findByPeriod(LocalDate startDate, LocalDate endDate) {
-        return orderRepository.findByDateBetween(startDate, endDate).stream()
-                .collect(Collectors.groupingBy(Order::getDate));
+    public List<Order> findByPeriod(LocalDate startDate, LocalDate endDate) {
+        return orderRepository.findByDateBetween(startDate, endDate);
     }
 
     @Transactional
