@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record ClientRequestDTO(
-
-
         @NotNull @Positive BigDecimal unitPrice,
         @NotBlank String name
 ) {
