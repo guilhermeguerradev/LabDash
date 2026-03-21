@@ -7,7 +7,6 @@ import com.labareda.api.dto.auth.AuthRequestDTO;
 import com.labareda.api.dto.auth.AuthResponseDTO;
 import com.labareda.api.security.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
