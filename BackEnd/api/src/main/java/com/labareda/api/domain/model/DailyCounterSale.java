@@ -12,9 +12,11 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "daily_counter_sales")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class DailyCounterSale {
 
     @Id
