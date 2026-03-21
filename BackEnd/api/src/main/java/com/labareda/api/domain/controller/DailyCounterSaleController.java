@@ -55,8 +55,4 @@ public class DailyCounterSaleController {
         dailyCounterSaleService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
 }
