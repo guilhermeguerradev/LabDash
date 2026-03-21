@@ -4,6 +4,7 @@ package com.labareda.api.domain.controller;
 import com.labareda.api.domain.service.AuthService;
 import com.labareda.api.dto.auth.AuthRequestDTO;
 import com.labareda.api.dto.auth.AuthResponseDTO;
+import com.labareda.api.dto.auth.UserRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,11 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthRequestDTO dto){
         return ResponseEntity.ok(authService.login(dto));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDTO dto) {
+        authService.register(dto);
+        return ResponseEntity.status(201).build();
+    }
+
 }
