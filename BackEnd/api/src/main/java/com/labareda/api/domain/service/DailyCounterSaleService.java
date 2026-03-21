@@ -42,7 +42,8 @@ public class DailyCounterSaleService {
     }
 
     public DailyCounterSale findByDate(LocalDate date) {
-        return repository.findByDate(date).orElse(null);
+        return repository.findByDate(date)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
     }
 
     public DailyCounterSale update(Long id,DailyCounterSaleRequestDTO dto) {
