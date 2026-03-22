@@ -46,6 +46,10 @@ public class DailyCounterSaleService {
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
     }
 
+    public List<DailyCounterSale> findByPeriod(LocalDate startDate, LocalDate endDate) {
+        return repository.findByDateBetween(startDate, endDate);
+    }
+
     public DailyCounterSale update(Long id,DailyCounterSaleRequestDTO dto) {
         DailyCounterSale sale = findByIdOrThrow(id);
 

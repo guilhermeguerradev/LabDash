@@ -4,6 +4,7 @@ import com.labareda.api.domain.model.Order;
 import com.labareda.api.domain.service.OrderService;
 import com.labareda.api.dto.order.OrderRequestDTO;
 import com.labareda.api.dto.order.OrderResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> create(@RequestBody OrderRequestDTO dto) {
+    public ResponseEntity<OrderResponseDTO> create(@RequestBody @Valid OrderRequestDTO dto) {
         Order response = orderService.save(dto);
         return ResponseEntity.status(201).body(OrderResponseDTO.fromEntity(response));
     }
