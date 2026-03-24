@@ -64,6 +64,20 @@ public class OrderService {
     }
 
     @Transactional
+    public Order update(Long id, OrderRequestDTO dto) {
+        Order order = findByIdOrThrow(id);
+        Client client = clientService.findByIdOrThrow(id);
+        Company company = companyService.findByIdOrThrow(id);
+
+        order.setClient(client);
+        order.setCompany(company);
+        order.setDate(dto.date());
+        order.setQuantity(dto.quantity());
+
+        return orderRepository.save(order);
+    }
+
+    @Transactional
     public void delete(Long id) {
         if(!orderRepository.existsById(id)) {
             throw new RuntimeException("order not found!");

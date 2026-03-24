@@ -46,6 +46,12 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponseDTO> update(@PathVariable Long id, @RequestBody @Valid OrderRequestDTO dto) {
+        Order response = orderService.update(id,dto);
+        return ResponseEntity.ok(OrderResponseDTO.fromEntity(response));
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<OrderResponseDTO>> search(
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
