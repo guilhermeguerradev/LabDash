@@ -7,7 +7,7 @@ interface RevenueChartProps {
   endpoint: string
   queryKey: string
   color: string
-  dataKey?: string  // ← adicionar
+  dataKey?: string  
 }
 
 function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue' }: RevenueChartProps) {
@@ -17,7 +17,7 @@ function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue'
     const response = await api.get(endpoint)
     console.log('Dados do gráfico:', response.data)
 
-    // Pega o array correto dependendo do endpoint
+    
     if (response.data.orders) return response.data.orders
     if (response.data.sales) return response.data.sales
     return []
@@ -30,7 +30,7 @@ function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue'
     )
   }
 
-  // Garante que chartData sempre é um array
+  
   const chartData = Array.isArray(data) ? data : []
 
   return (
@@ -68,7 +68,7 @@ function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue'
           />
           <Line
             type="monotone"
-            dataKey={dataKey}  // ← trocar de "totalValue" para dataKey
+            dataKey={dataKey}  
             stroke={color}
             strokeWidth={2}
             dot={{ fill: color, r: 4 }}

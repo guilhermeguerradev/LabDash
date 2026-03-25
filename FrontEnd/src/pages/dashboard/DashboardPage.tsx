@@ -94,7 +94,6 @@ function DashboardPage() {
             iconColor="text-purple-400"
             glowColor="rgba(192,132,252,0.15)"
           />
-          
         </div>
       )}
 
@@ -112,7 +111,7 @@ function DashboardPage() {
           endpoint="/reports/sales/last-7"
           queryKey="sales-last-7"
           color="#c084fc"
-          dataKey="totalDay"  // ← adicionar
+          dataKey="totalDay"  
         />
 
       {/* Modal */}
@@ -121,7 +120,6 @@ function DashboardPage() {
         onClose={() => setIsModalOpen(false)}
         onGenerate={handleGenerate}
       />
-
     </div>
   )
 }
