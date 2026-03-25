@@ -3,6 +3,7 @@ import { FileText, Truck, ShoppingCart, DollarSign } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import ReportModal from '@/components/dashboard/ReportModal'
 import StatsCard from '@/components/dashboard/StatsCard'
+import RevenueChart from '@/components/dashboard/RevenueChart'
 import api from '@/services/api'
 import type { FinancialReport } from '@/types'
 
@@ -96,6 +97,23 @@ function DashboardPage() {
           
         </div>
       )}
+
+      // Gráfico de Entregas
+        <RevenueChart
+          title="Entregas — Últimos 7 dias"
+          endpoint="/reports/orders/last-7"
+          queryKey="orders-last-7"
+          color="#22d3ee"
+        />
+
+        // Gráfico de Vendas Balcão
+        <RevenueChart
+          title="Vendas Balcão — Últimos 7 dias"
+          endpoint="/reports/sales/last-7"
+          queryKey="sales-last-7"
+          color="#c084fc"
+          dataKey="totalDay"  // ← adicionar
+        />
 
       {/* Modal */}
       <ReportModal
