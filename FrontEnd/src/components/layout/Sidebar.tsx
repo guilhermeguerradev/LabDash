@@ -16,9 +16,13 @@ function Sidebar() {
     <aside className="w-64 min-h-screen bg-[#0a0f1e] border-r border-white/10 flex flex-col px-4 py-6">
 
       {/* Logo */}
-      <div className="flex items-center gap-2 px-4 mb-8">
-        <div className="w-7 h-7 bg-green-400 rounded-md" />
-        <span className="text-white font-bold text-lg">LabDash</span>
+      <div className="flex items-center gap-3 px-4 mb-8">
+        <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-cyan-400 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(74,222,128,0.4)]">
+          <span className="text-black font-black text-sm">L</span>
+        </div>
+        <span className="text-white font-bold text-xl tracking-wide">
+          Lab<span className="text-green-400">Dash</span>
+        </span>
       </div>
 
       {/* Menu */}
