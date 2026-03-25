@@ -24,7 +24,7 @@ public class Order {
 
     @NotNull
     @ManyToOne
-    @JoinColumn (name = "work_id")
+    @JoinColumn (name = "company_id")
     private Company company;
 
     @NotNull

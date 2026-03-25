@@ -2,9 +2,49 @@ import { User, Lock, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react' 
 import LoginCard from '@/components/auth/LoginCard'
 import LoginInput from '@/components/auth/LoginInput'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '@/stores/authStore'
+import api from '@/services/api'
+
+const loginSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(6, 'Mínimo 6 caracteres'),
+})
+
+type LoginForm = z.infer<typeof loginSchema>
 
 function LoginPage() {
+  const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+
+  const navigate = useNavigate()
+
+  const login = useAuthStore((state) => state.login)
+
+  const {
+    register,      
+    handleSubmit, 
+    formState: { errors, isSubmitting }, 
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema), 
+  })
+
+  async function onSubmit(data: LoginForm) {
+      try {
+        setError(null)
+        const response = await api.post('/auth/login', data) 
+        const { token, role, name } = response.data          
+        login(token, role, name)                             
+        navigate('/dashboard')                                
+      } catch {
+        setError('Email ou senha inválidos')                 
+    }
+  }
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050818] relative overflow-hidden">
 
@@ -21,13 +61,17 @@ function LoginPage() {
             Login
           </h1>
 
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <LoginInput
               icon={User}
               iconColor="text-green-400"
               type="email"
               placeholder="Email"
+              {...register('email')}
             />
+            {errors.email && (
+              <p className="text-red-400 text-xs ml-1">{errors.email.message}</p>
+            )}
 
             <LoginInput
               icon={Lock}
@@ -36,12 +80,22 @@ function LoginPage() {
               placeholder="Password"
               rightIcon={showPassword ? EyeOff : Eye} 
               onRightIconClick={() => setShowPassword(!showPassword)}
+              {...register('password')}
             />
+            {errors.password && (
+              <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>
+            )}
+            {error && (
+              <p className="text-red-400 text-sm text-center">{error}</p>
+            )}
 
-            <button className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-base transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] mt-4">
-              Login
+            <button
+            type="submit"
+            disabled={isSubmitting}
+             className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-base transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
+              {isSubmitting ? 'Entrando...' : 'Login'}
             </button>
-          </div>
+          </form>
         </LoginCard>
       </div>
     </div>
