@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FileText, Truck, ShoppingCart, DollarSign } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 import ReportModal from '@/components/dashboard/ReportModal'
 import StatsCard from '@/components/dashboard/StatsCard'
 import RevenueChart from '@/components/dashboard/RevenueChart'
@@ -12,6 +11,8 @@ function DashboardPage() {
   const [startDate, setStartDate] = useState(today)
   const [endDate, setEndDate] = useState(today)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [data, setData] = useState<FinancialReport | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   function formatDate(date: string) {
     const [year, month, day] = date.split('-')
@@ -25,25 +26,32 @@ function DashboardPage() {
     return `Resumo de ${formatDate(startDate)} até ${formatDate(endDate)}`
   }
 
-  // Busca os dados financeiros do período
-  const { data, isLoading } = useQuery<FinancialReport>({
-    queryKey: ['financial', startDate, endDate],
-    queryFn: async () => {
+  function formatCurrency(value: number) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+  }
+
+  const fetchFinancial = useCallback(async () => {
+    try {
+      setIsLoading(true)
       const response = await api.post('/reports/financial', {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       })
-      return response.data
-    },
-  })
+      setData(response.data)
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [startDate, endDate])
+
+  useEffect(() => {
+    fetchFinancial()
+  }, [fetchFinancial])
 
   function handleGenerate(start: string, end: string) {
     setStartDate(start)
     setEndDate(end)
-  }
-
-  function formatCurrency(value: number) {
-    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   }
 
   return (
@@ -97,22 +105,19 @@ function DashboardPage() {
         </div>
       )}
 
-      // Gráfico de Entregas
-        <RevenueChart
-          title="Entregas — Últimos 7 dias"
-          endpoint="/reports/orders/last-7"
-          queryKey="orders-last-7"
-          color="#22d3ee"
-        />
+      {/* Gráficos */}
+      <RevenueChart
+        title="Entregas — Últimos 7 dias"
+        endpoint="/reports/orders/last-7"
+        color="#22d3ee"
+      />
 
-        // Gráfico de Vendas Balcão
-        <RevenueChart
-          title="Vendas Balcão — Últimos 7 dias"
-          endpoint="/reports/sales/last-7"
-          queryKey="sales-last-7"
-          color="#c084fc"
-          dataKey="totalDay"  
-        />
+      <RevenueChart
+        title="Vendas Balcão — Últimos 7 dias"
+        endpoint="/reports/sales/last-7"
+        color="#c084fc"
+        dataKey="totalDay"
+      />
 
       {/* Modal */}
       <ReportModal
@@ -120,6 +125,7 @@ function DashboardPage() {
         onClose={() => setIsModalOpen(false)}
         onGenerate={handleGenerate}
       />
+
     </div>
   )
 }

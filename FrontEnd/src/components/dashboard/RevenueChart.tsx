@@ -1,37 +1,43 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState, useEffect, useCallback } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import api from '@/services/api'
 
 interface RevenueChartProps {
   title: string
   endpoint: string
-  queryKey: string
   color: string
-  dataKey?: string  
+  dataKey?: string
 }
 
-function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue' }: RevenueChartProps) {
-  const { data, isLoading } = useQuery<{ date: string; totalValue: number }[]>({
-    queryKey: [queryKey],
-    queryFn: async () => {
-    const response = await api.get(endpoint)
-    console.log('Dados do gráfico:', response.data)
+function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: RevenueChartProps) {
+  const [chartData, setChartData] = useState<{ date: string; totalValue: number }[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
-    
-    if (response.data.orders) return response.data.orders
-    if (response.data.sales) return response.data.sales
-    return []
-    },
-  })
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const response = await api.get(endpoint)
+
+      if (response.data.orders) setChartData(response.data.orders)
+      else if (response.data.sales) setChartData(response.data.sales)
+      else setChartData([])
+    } catch (error) {
+      console.error('Erro ao buscar dados do gráfico:', error)
+      setChartData([])
+    } finally {
+      setIsLoading(false)
+    }
+  }, [endpoint])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   if (isLoading) {
     return (
       <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-64 animate-pulse" />
     )
   }
-
-  
-  const chartData = Array.isArray(data) ? data : []
 
   return (
     <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
@@ -68,12 +74,12 @@ function RevenueChart({ title, endpoint, queryKey, color, dataKey = 'totalValue'
           />
           <Line
             type="monotone"
-            dataKey={dataKey}  
+            dataKey={dataKey}
             stroke={color}
             strokeWidth={2}
             dot={{ fill: color, r: 4 }}
             activeDot={{ r: 6 }}
-            />
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
