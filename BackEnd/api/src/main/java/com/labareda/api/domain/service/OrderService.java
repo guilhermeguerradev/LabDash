@@ -59,6 +59,10 @@ public class OrderService {
         return orderRepository.findByCompanyNameIgnoreCase(companyName);
     }
 
+    public List<Order> findByClientName(String clientName) {
+        return orderRepository.findByClientNameIgnoreCase(clientName);
+    }
+
     public List<Order> findByPeriod(LocalDate startDate, LocalDate endDate) {
         return orderRepository.findByDateBetween(startDate, endDate);
     }

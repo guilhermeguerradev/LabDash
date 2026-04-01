@@ -12,4 +12,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByDate(LocalDate date);
     List<Order> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<Order> findByCompanyNameIgnoreCase(String companyName);
+    List<Order> findByClientNameIgnoreCase(String clientName);
 }

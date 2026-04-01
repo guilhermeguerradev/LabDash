@@ -55,6 +55,7 @@ public class OrderController {
     @GetMapping("/search")
     public ResponseEntity<List<OrderResponseDTO>> search(
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
+            @RequestParam(required = false) String client,
             @RequestParam(required = false) String company,
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate) {
@@ -67,7 +68,10 @@ public class OrderController {
             orders = orderService.findByDate(date);
         } else if (company != null) {
             orders = orderService.findByCompanyName(company);
-        }  else {
+        } else if ( client != null) {
+            orders = orderService.findByClientName(client);
+        }
+        else {
             orders = orderService.findAll();
         }
 
