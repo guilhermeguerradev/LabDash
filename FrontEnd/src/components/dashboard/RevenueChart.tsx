@@ -17,7 +17,6 @@ function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: Revenu
     try {
       setIsLoading(true)
       const response = await api.get(endpoint)
-
       if (response.data.orders) setChartData(response.data.orders)
       else if (response.data.sales) setChartData(response.data.sales)
       else setChartData([])

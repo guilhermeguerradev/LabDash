@@ -3,3 +3,13 @@ export interface FinancialReport {
   totalSales: number
   totalRevenue: number
 }
+export interface OrderResponse {
+  id: number
+  companyId: number
+  companyName: string
+  clientId: number
+  clientName: string
+  date: string
+  quantity: number
+  totalValue: number
+}

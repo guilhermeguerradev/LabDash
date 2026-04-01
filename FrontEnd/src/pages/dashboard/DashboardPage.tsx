@@ -7,7 +7,9 @@ import api from '@/services/api'
 import type { FinancialReport } from '@/types'
 
 function DashboardPage() {
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toLocaleDateString('en-CA', {
+    timeZone: 'America/Sao_Paulo'
+  })
   const [startDate, setStartDate] = useState(today)
   const [endDate, setEndDate] = useState(today)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,6 +39,9 @@ function DashboardPage() {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
       })
+      console.log(startDate)
+      console.log(endDate)
+      console.log(response.data)
       setData(response.data)
     } catch (error) {
       console.error('Erro ao buscar dados:', error)

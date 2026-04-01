@@ -14,7 +14,10 @@ function App() {
         
         <Route path="/orders" element={
           <PrivateRoute>
-            <OrdersPage />
+            <MainLayout>
+                <OrdersPage />
+              </MainLayout>
+            
           </PrivateRoute>
           }/>
 
