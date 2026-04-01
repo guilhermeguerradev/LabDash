@@ -13,3 +13,12 @@ export interface OrderResponse {
   quantity: number
   totalValue: number
 }
+
+export interface DailyCounterSale {
+  id: number
+  date: string
+  pixAmount: number
+  cashAmount: number
+  cardAmount: number
+  totalDay: number
+}

@@ -4,6 +4,7 @@ import OrdersPage from '@/pages/orders/OrdersPage'
 import PrivateRoute from './components/auth/PrivateRoute'
 import MainLayout from './components/layout/MainLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
+import SalesPage from './pages/sales/SalesPage'
 
 function App() {
   return (
@@ -29,6 +30,14 @@ function App() {
             </PrivateRoute>
           }
           />
+
+          <Route path='/sales' element={
+            <PrivateRoute>
+              <MainLayout>
+                <SalesPage/>
+              </MainLayout>
+            </PrivateRoute>
+          }/>
 
 
       </Routes>

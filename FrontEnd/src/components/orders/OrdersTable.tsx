@@ -13,6 +13,12 @@ function OrdersTable({ orders, onEdit, onDelete, isAdmin }: OrdersTableProps) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   }
 
+  function formatDate(date: string) {
+    if (date.includes('/')) return date // já está em dd/MM/yyyy
+    const [year, month, day] = date.split('-')
+    return `${day}/${month}/${year}`
+  }
+
   return (
     <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
       <div className="overflow-x-auto">
@@ -38,12 +44,12 @@ function OrdersTable({ orders, onEdit, onDelete, isAdmin }: OrdersTableProps) {
                 </td>
               </tr>
             ) : (
-              orders.map((order) => (
+              [...orders].sort((a, b) => b.date.localeCompare(a.date)).map((order) => (
                 <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="py-3 text-gray-400">{order.id}</td>
                   <td className="py-3 text-white">{order.companyName}</td>
                   <td className="py-3 text-white">{order.clientName}</td>
-                  <td className="py-3 text-gray-400">{String(order.date)}</td>
+                  <td className="py-3 text-gray-400">{formatDate(order.date)}</td>
                   <td className="py-3 text-cyan-400 font-medium">{order.quantity} itens</td>
                   <td className="py-3 text-green-400 font-medium">
                     {formatCurrency(order.totalValue)}
