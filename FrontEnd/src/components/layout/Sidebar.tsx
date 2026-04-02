@@ -13,7 +13,7 @@ function Sidebar() {
   }
 
   return (
-    <aside className="w-64 min-h-screen bg-[#0a0f1e] border-r border-white/10 flex flex-col px-4 py-6">
+    <aside className="w-64 h-screen sticky top-0 bg-[#0a0f1e] border-r border-white/10 flex flex-col px-4 py-6">
 
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 mb-8">
@@ -37,7 +37,7 @@ function Sidebar() {
 
       {/* Usuário + Logout */}
       <div className="border-t border-white/10 pt-4 mt-4">
-        <p className="text-gray-400 text-xs px-4 mb-1">Logado como</p>
+        <p className="text-gray-400 text-xs px-4 mb-1">Logado com</p>
         <p className="text-white text-sm font-medium px-4 mb-3">{name}</p>
         <button
           onClick={handleLogout}

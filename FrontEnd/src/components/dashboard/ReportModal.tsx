@@ -8,7 +8,7 @@ interface ReportModalProps {
 }
 
 function ReportModal({ isOpen, onClose, onGenerate }: ReportModalProps) {
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
   const [startDate, setStartDate] = useState(today)
   const [endDate, setEndDate] = useState(today)
 

@@ -53,18 +53,22 @@ function SalesModal({ isOpen, onClose, onSuccess, sale }: SalesModalProps) {
     },
   })
 
+  function getTodayBR() {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+}
+
   useEffect(() => {
     if (isOpen) {
       if (sale) {
         reset({
-          date: formatDateToInput(sale.date),
+          date: formatDateToInput(sale.date),  // ← já existe
           pixAmount: sale.pixAmount,
           cashAmount: sale.cashAmount,
           cardAmount: sale.cardAmount,
         })
       } else {
         reset({
-          date: '',
+          date: getTodayBR(),  // ← troca '' por getTodayBR()
           pixAmount: 0,
           cashAmount: 0,
           cardAmount: 0,

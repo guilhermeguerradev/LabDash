@@ -33,12 +33,29 @@ interface OrderModalProps {
   order?: OrderResponse | null
 }
 
+function getTodayBR() {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+}
+
+function formatDateToInput(date: string) {
+  // converte dd/MM/yyyy → yyyy-MM-dd se necessário
+  if (date.includes('/')) {
+    const [day, month, year] = date.split('/')
+    return `${year}-${month}-${day}`
+  }
+  return date
+}
+
+function formatDateToBackend(date: string) {
+  const [year, month, day] = date.split('-')
+  return `${day}/${month}/${year}`
+}
+
 function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
   const [companies, setCompanies] = useState<Company[]>([])
   const [clients, setClients] = useState<Client[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Se tem order → é edição, senão → é criação
   const isEditing = !!order
 
   const {
@@ -75,25 +92,29 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
         companyId: order.companyId,
         clientId: order.clientId,
         quantity: order.quantity,
-        date: order.date,
+        date: formatDateToInput(order.date),
       })
     } else {
       reset({
         companyId: 0,
         clientId: 0,
         quantity: 0,
-        date: '',
+        date: getTodayBR(),
       })
     }
-  }, [order, reset])
+  }, [order, reset, isOpen])
 
   async function onSubmit(data: OrderForm) {
     try {
       setIsSubmitting(true)
+      const payload = {
+        ...data,
+        date: formatDateToBackend(data.date),
+      }
       if (isEditing) {
-        await api.put(`/orders/${order.id}`, data)
+        await api.put(`/orders/${order.id}`, payload)
       } else {
-        await api.post('/orders', data)
+        await api.post('/orders', payload)
       }
       onSuccess()
       onClose()
@@ -127,11 +148,11 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
             <label className="text-gray-400 text-xs mb-2 block">Obra</label>
             <select
               {...register('companyId', { valueAsNumber: true })}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             >
-              <option value={0} className="bg-[#0a0f1e]">Selecione uma obra</option>
+              <option value={0}>Selecione uma obra</option>
               {companies.map((company) => (
-                <option key={company.id} value={company.id} className="bg-[#0a0f1e]">
+                <option key={company.id} value={company.id}>
                   {company.name}
                 </option>
               ))}
@@ -146,11 +167,11 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
             <label className="text-gray-400 text-xs mb-2 block">Cliente</label>
             <select
               {...register('clientId', { valueAsNumber: true })}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             >
-              <option value={0} className="bg-[#0a0f1e]">Selecione um cliente</option>
+              <option value={0}>Selecione um cliente</option>
               {clients.map((client) => (
-                <option key={client.id} value={client.id} className="bg-[#0a0f1e]">
+                <option key={client.id} value={client.id}>
                   {client.name}
                 </option>
               ))}
@@ -180,7 +201,7 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
             <input
               type="date"
               {...register('date')}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             />
             {errors.date && (
               <p className="text-red-400 text-xs mt-1">{errors.date.message}</p>

@@ -5,6 +5,7 @@ import PrivateRoute from './components/auth/PrivateRoute'
 import MainLayout from './components/layout/MainLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import SalesPage from './pages/sales/SalesPage'
+import SettingsPage from './pages/settings/SettingsPage'
 
 function App() {
   return (
@@ -38,6 +39,14 @@ function App() {
               </MainLayout>
             </PrivateRoute>
           }/>
+
+          <Route path="/settings" element={
+          <PrivateRoute>
+            <MainLayout>
+              <SettingsPage />
+            </MainLayout>
+          </PrivateRoute>
+        } />
 
 
       </Routes>

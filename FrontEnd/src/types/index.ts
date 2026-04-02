@@ -22,3 +22,14 @@ export interface DailyCounterSale {
   cardAmount: number
   totalDay: number
 }
+
+export interface Client {
+  id: number
+  name: string
+  unitPrice: number
+}
+
+export interface Company {
+  id: number
+  name: string
+}
