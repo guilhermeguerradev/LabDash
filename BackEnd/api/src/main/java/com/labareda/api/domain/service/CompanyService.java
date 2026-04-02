@@ -3,6 +3,7 @@ package com.labareda.api.domain.service;
 import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.model.Company;
 import com.labareda.api.domain.repository.CompanyRepository;
+import com.labareda.api.domain.repository.OrderRepository;
 import com.labareda.api.dto.company.CompanyRequestDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final OrderRepository orderRepository;
 
     @Transactional
     public Company save(CompanyRequestDTO dto) {
@@ -52,12 +54,11 @@ public class CompanyService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        if (!companyRepository.existsById(id)) {
-            throw new RuntimeException("Empresa não encontrada");
+    public void delete(Long id, boolean deleteOrders) {
+        Company company = findByIdOrThrow(id);
+        if (deleteOrders) {
+            orderRepository.deleteAllByCompany(company);
         }
         companyRepository.deleteById(id);
     }
-
-
 }

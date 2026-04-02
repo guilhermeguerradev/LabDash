@@ -2,6 +2,7 @@ package com.labareda.api.domain.service;
 
 import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.repository.ClientRepository;
+import com.labareda.api.domain.repository.OrderRepository;
 import com.labareda.api.dto.client.ClientRequestDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final OrderRepository orderRepository;
 
     @Transactional
     public Client save(ClientRequestDTO dto) {
@@ -52,9 +54,11 @@ public class ClientService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        if (!clientRepository.existsById(id)) {
-            throw new RuntimeException("Cliente não encontrado");
+    public void delete(Long id, boolean deleteOrders) {
+        Client client = findByIdOrThrow(id);
+
+        if(deleteOrders) {
+            orderRepository.deleteAllByClient(client);
         }
         clientRepository.deleteById(id);
     }

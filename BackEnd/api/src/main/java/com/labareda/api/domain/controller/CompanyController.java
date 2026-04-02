@@ -31,9 +31,8 @@ public class CompanyController {
         return ResponseEntity.status(200).body(CompanyResponseDTO.fromEntity(company));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        companyService.delete(id);
-
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestParam(defaultValue = "false") boolean deleteOrders) {
+        companyService.delete(id, deleteOrders);
         return ResponseEntity.noContent().build();
     }
 
