@@ -6,6 +6,7 @@ import MainLayout from './components/layout/MainLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import SalesPage from './pages/sales/SalesPage'
 import SettingsPage from './pages/settings/SettingsPage'
+import AdminRoute from './components/auth/AdminRoute'
 
 function App() {
   return (
@@ -41,11 +42,11 @@ function App() {
           }/>
 
           <Route path="/settings" element={
-          <PrivateRoute>
-            <MainLayout>
-              <SettingsPage />
-            </MainLayout>
-          </PrivateRoute>
+            <AdminRoute>
+              <MainLayout>
+                <SettingsPage />
+              </MainLayout>
+            </AdminRoute>
         } />
 
 
