@@ -6,12 +6,25 @@ import type { DailyCounterSale } from '@/types'
 import SalesTable from '@/components/sales/SalesTable'
 import SalesFilter from '@/components/sales/SalesFilter'
 import SalesModal from '@/components/sales/SalesModal'
+import Pagination from '@/components/shared/Pagination'
+
+interface PageResponse {
+  content: DailyCounterSale[]
+  totalPages: number
+  totalElements: number
+  number: number
+}
 
 function SalesPage() {
   const [sales, setSales] = useState<DailyCounterSale[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSale, setSelectedSale] = useState<DailyCounterSale | null>(null)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
+  const [activeDate, setActiveDate] = useState<string | undefined>()
+  const [isFiltered, setIsFiltered] = useState(false)
 
   const role = useAuthStore((state) => state.role)
   const isAdmin = role === 'ADMIN'
@@ -21,18 +34,24 @@ function SalesPage() {
     setIsModalOpen(true)
   }
 
-  const fetchSales = async (params?: { date?: string }) => {
+  const fetchSales = async (date?: string, page = 0) => {
     try {
       setIsLoading(true)
-
-      let url = '/counter-sales'
-
-      if (params?.date) {
-        url = `/counter-sales/search?date=${params.date}`
+      if (date) {
+        const response = await api.get(`/counter-sales/search?date=${date}`)
+        setSales(Array.isArray(response.data) ? response.data : [response.data])
+        setTotalPages(0)
+        setTotalElements(1)
+        setIsFiltered(true)
+      } else {
+        const response = await api.get(`/counter-sales?page=${page}&size=15`)
+        const data: PageResponse = response.data
+        setSales(data.content)
+        setTotalPages(data.totalPages)
+        setTotalElements(data.totalElements)
+        setCurrentPage(data.number)
+        setIsFiltered(false)
       }
-
-      const response = await api.get(url)
-      setSales(Array.isArray(response.data) ? response.data : [response.data])
     } catch (error) {
       console.error('Erro ao buscar vendas:', error)
     } finally {
@@ -45,14 +64,20 @@ function SalesPage() {
   }, [])
 
   function handleFilter(params: { date?: string }) {
-    fetchSales(params)
+    setActiveDate(params.date)
+    setCurrentPage(0)
+    fetchSales(params.date, 0)
+  }
+  function handlePageChange(page: number) {
+    setCurrentPage(page)
+    fetchSales(activeDate, page)
   }
 
   async function handleDelete(id: number) {
     if (!confirm('Deseja deletar esta venda?')) return
     try {
       await api.delete(`/counter-sales/${id}`)
-      fetchSales()
+      fetchSales(activeDate, currentPage)
     } catch (error) {
       console.error('Erro ao deletar:', error)
     }
@@ -81,22 +106,31 @@ function SalesPage() {
       {/* Filtro */}
       <SalesFilter onFilter={handleFilter} />
 
-      {/* Tabela */}
       {isLoading ? (
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-64 animate-pulse" />
       ) : (
-        <SalesTable
-          sales={sales}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          isAdmin={isAdmin}
-        />
+        <>
+          <SalesTable
+            sales={sales}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            isAdmin={isAdmin}
+          />
+          {!isFiltered && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalElements={totalElements}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </>
       )}
 
       <SalesModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={() => fetchSales()}
+        onSuccess={() => fetchSales(activeDate, currentPage)}
         sale={selectedSale}
       />
 

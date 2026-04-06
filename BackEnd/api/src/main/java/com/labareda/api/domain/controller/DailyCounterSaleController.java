@@ -6,12 +6,14 @@ import com.labareda.api.dto.dailyCounterSale.DailyCounterSaleRequestDTO;
 import com.labareda.api.dto.dailyCounterSale.DailyCounterSaleResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/counter-sales")
@@ -21,8 +23,13 @@ public class DailyCounterSaleController {
     private final DailyCounterSaleService dailyCounterSaleService;
 
     @GetMapping
-    public ResponseEntity<List<DailyCounterSaleResponseDTO>> findAll() {
-        List<DailyCounterSaleResponseDTO> response = dailyCounterSaleService.findAll().stream().map(DailyCounterSaleResponseDTO::fromEntity).toList();
+    public ResponseEntity<Page<DailyCounterSaleResponseDTO>> findAll(
+            @RequestParam(defaultValue = "01") int page,
+            @RequestParam(defaultValue = "15") int size
+    ) {
+        Page<DailyCounterSaleResponseDTO> response = dailyCounterSaleService
+                .findAll(PageRequest.of(page,size, Sort.by("date").descending()))
+                .map(DailyCounterSaleResponseDTO::fromEntity);
         return ResponseEntity.ok(response);
     }
 

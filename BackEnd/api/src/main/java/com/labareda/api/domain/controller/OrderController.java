@@ -6,6 +6,9 @@ import com.labareda.api.dto.order.OrderRequestDTO;
 import com.labareda.api.dto.order.OrderResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +42,13 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> findAll() {
-        List<OrderResponseDTO> response = orderService.findAll()
-                .stream()
-                .map(OrderResponseDTO::fromEntity).toList();
+    public ResponseEntity<Page<OrderResponseDTO>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size
+    ) {
+        Page<OrderResponseDTO> response = orderService
+                .findAll(PageRequest.of(page, size, Sort.by("date").descending()))
+                .map(OrderResponseDTO::fromEntity);
         return ResponseEntity.ok(response);
     }
 

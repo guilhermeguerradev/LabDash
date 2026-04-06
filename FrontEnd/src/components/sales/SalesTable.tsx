@@ -44,12 +44,7 @@ function SalesTable({ sales, onEdit, onDelete, isAdmin }: SalesTableProps) {
           </tr>
         </thead>
         <tbody>
-          {[...sales].sort((a, b) => {
-              // date vem como dd/MM/yyyy do backend
-              const [da, ma, ya] = a.date.split('/')
-              const [db, mb, yb] = b.date.split('/')
-              return new Date(`${yb}-${mb}-${db}`).getTime() - new Date(`${ya}-${ma}-${da}`).getTime()
-            }).map((sale) => (
+          {sales.map((sale) => (
             <tr
               key={sale.id}
               className="border-b border-white/5 hover:bg-white/5 transition-colors duration-150"

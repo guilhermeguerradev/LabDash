@@ -44,7 +44,7 @@ function OrdersTable({ orders, onEdit, onDelete, isAdmin }: OrdersTableProps) {
                 </td>
               </tr>
             ) : (
-              [...orders].sort((a, b) => b.date.localeCompare(a.date)).map((order) => (
+              orders.map((order) => (
                 <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="py-3 text-gray-400">{order.id}</td>
                   <td className="py-3 text-white">{order.companyName}</td>

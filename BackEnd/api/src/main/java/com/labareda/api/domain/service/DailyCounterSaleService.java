@@ -4,8 +4,9 @@ package com.labareda.api.domain.service;
 import com.labareda.api.domain.model.DailyCounterSale;
 import com.labareda.api.domain.repository.DailyCounterSaleRepository;
 import com.labareda.api.dto.dailyCounterSale.DailyCounterSaleRequestDTO;
-import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,8 +33,8 @@ public class DailyCounterSaleService {
         return repository.save(sale);
     }
 
-    public List<DailyCounterSale> findAll() {
-        return repository.findAll();
+    public Page<DailyCounterSale> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public DailyCounterSale findByIdOrThrow(Long id) {
