@@ -150,9 +150,9 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
               {...register('companyId', { valueAsNumber: true })}
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             >
-              <option value={0}>Selecione uma obra</option>
+              <option value={0} className="bg-[#0a0f1e] text-white">Selecione uma obra</option>
               {companies.map((company) => (
-                <option key={company.id} value={company.id}>
+                <option key={company.id} value={company.id} className="bg-[#0a0f1e] text-white">
                   {company.name}
                 </option>
               ))}
@@ -167,11 +167,11 @@ function OrderModal({ isOpen, onClose, onSuccess, order }: OrderModalProps) {
             <label className="text-gray-400 text-xs mb-2 block">Cliente</label>
             <select
               {...register('clientId', { valueAsNumber: true })}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark] cursor-pointer" 
             >
-              <option value={0}>Selecione um cliente</option>
+              <option value={0} className="bg-[#0a0f1e] text-white">Selecione um cliente</option>
               {clients.map((client) => (
-                <option key={client.id} value={client.id}>
+                <option key={client.id} value={client.id} className="bg-[#0a0f1e] text-white">
                   {client.name}
                 </option>
               ))}

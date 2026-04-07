@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import SidebarItem from './SidebarItem'
 
-function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void
+}
+
+function Sidebar({ onClose }: SidebarProps) {
   const navigate = useNavigate()
   const { name, role, logout } = useAuthStore()
 
@@ -13,7 +17,7 @@ function Sidebar() {
   }
 
   return (
-    <aside className="w-64 h-screen sticky top-0 bg-[#0a0f1e] border-r border-white/10 flex flex-col px-4 py-6">
+    <aside className="w-64 h-screen bg-[#0a0f1e] border-r border-white/10 flex flex-col px-4 py-6">
 
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 mb-8">
@@ -27,21 +31,21 @@ function Sidebar() {
 
       {/* Menu */}
       <nav className="flex flex-col gap-1 flex-1">
-        <SidebarItem icon={LayoutDashboard} label="Dashboard" path="/dashboard" />
-        <SidebarItem icon={Truck} label="Entregas (Obras)" path="/orders" />
-        <SidebarItem icon={ShoppingCart} label="Vendas Balcão" path="/sales" />
+        <SidebarItem icon={LayoutDashboard} label="Dashboard" path="/dashboard" onNavigate={onClose} />
+        <SidebarItem icon={Truck} label="Entregas (Obras)" path="/orders" onNavigate={onClose} />
+        <SidebarItem icon={ShoppingCart} label="Vendas Balcão" path="/sales" onNavigate={onClose} />
         {role === 'ADMIN' && (
-          <SidebarItem icon={Settings} label="Configurações" path="/settings" />
+          <SidebarItem icon={Settings} label="Configurações" path="/settings" onNavigate={onClose} />
         )}
       </nav>
 
       {/* Usuário + Logout */}
       <div className="border-t border-white/10 pt-4 mt-4">
-        <p className="text-gray-400 text-xs px-4 mb-1">Logado com</p>
+        <p className="text-gray-400 text-xs px-4 mb-1">Logado como</p>
         <p className="text-white text-sm font-medium px-4 mb-3">{name}</p>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200"
+          className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200"
         >
           <LogOut size={18} />
           Sair
