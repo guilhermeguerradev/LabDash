@@ -87,7 +87,7 @@ function SalesPage() {
     <div className="space-y-6">
 
       {/* Título + Botão */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Vendas Balcão</h1>
           <p className="text-gray-400 text-sm mt-1">Gestão de vendas no balcão</p>
@@ -95,10 +95,11 @@ function SalesPage() {
         {isAdmin && (
           <button
             onClick={() => { setSelectedSale(null); setIsModalOpen(true) }}
-            className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-purple-400/10 border border-purple-400/20 text-purple-400 text-sm font-medium rounded-xl hover:bg-purple-400/20 transition-all duration-200"
+            className="cursor-pointer flex items-center gap-2 px-3 py-2 bg-purple-400/10 border border-purple-400/20 text-purple-400 text-xs sm:text-sm font-medium rounded-xl hover:bg-purple-400/20 transition-all duration-200 shrink-0"
           >
             <Plus size={16} />
-            Nova Venda
+            <span className="hidden sm:inline">Nova Venda</span>
+            <span className="sm:hidden">Nova</span>
           </button>
         )}
       </div>

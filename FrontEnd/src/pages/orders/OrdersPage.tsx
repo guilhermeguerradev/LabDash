@@ -103,7 +103,7 @@ function OrdersPage() {
     <div className="space-y-6">
 
       {/* Título + Botão Nova Entrega */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Entregas</h1>
           <p className="text-gray-400 text-sm mt-1">Gestão de pedidos de entrega</p>
@@ -111,10 +111,11 @@ function OrdersPage() {
         {isAdmin && (
           <button
             onClick={() => { setSelectedOrder(null); setIsModalOpen(true) }}
-            className="flex items-center gap-2 px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200"
+            className="flex items-center gap-2 px-3 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-xs sm:text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200 shrink-0"
           >
             <Plus size={16} />
-            Nova Entrega
+            <span className="hidden sm:inline">Nova Entrega</span>
+            <span className="sm:hidden">Nova</span>
           </button>
         )}
       </div>

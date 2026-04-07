@@ -63,29 +63,30 @@ function DashboardPage() {
     <div className="space-y-8">
 
       {/* Título + Botão */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
           <p className="text-gray-400 text-sm mt-1">{getPeriodText()}</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200"
+          className="flex items-center gap-2 px-3 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-xs sm:text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200 whitespace-nowrap shrink-0"
         >
-          <FileText size={16} />
-          Gerar Relatório
+          <FileText size={14} />
+          <span className="hidden sm:inline">Gerar Relatório</span>
+          <span className="sm:hidden">Relatório</span>
         </button>
       </div>
 
       {/* Cards */}
       {isLoading ? (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 h-24 animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatsCard
             title="Total Geral"
             value={formatCurrency(data?.totalRevenue ?? 0)}

@@ -43,18 +43,19 @@ function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: Revenu
       <h2 className="text-white font-semibold text-sm mb-6">{title}</h2>
 
       <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={chartData}>
+        <LineChart data={chartData} margin={{ left: -10, right: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
           <XAxis
             dataKey="date"
-            tick={{ fill: '#9ca3af', fontSize: 12 }}
+            tick={{ fill: '#9ca3af', fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: '#9ca3af', fontSize: 12 }}
+            tick={{ fill: '#9ca3af', fontSize: 11 }}
             axisLine={false}
             tickLine={false}
+            width={70}
             tickFormatter={(value) =>
               value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
             }
@@ -65,6 +66,7 @@ function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: Revenu
               border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: '12px',
               color: '#fff',
+              fontSize: '13px',
             }}
             formatter={(value) => [
               Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),

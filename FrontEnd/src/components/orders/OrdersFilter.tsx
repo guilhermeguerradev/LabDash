@@ -42,13 +42,11 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
 
   return (
     <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
-
       {/* Botões de tipo de filtro */}
-      <div className="flex gap-2">
-
+      <div className="grid grid-cols-2 sm:flex gap-2">
         <button
           onClick={() => setFilterType('date')}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+          className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200
             ${filterType === 'date'
               ? 'bg-green-400/10 border border-green-400/20 text-green-400'
               : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
@@ -56,10 +54,9 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
         >
           Por Data
         </button>
-
         <button
           onClick={() => setFilterType('period')}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+          className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200
             ${filterType === 'period'
               ? 'bg-green-400/10 border border-green-400/20 text-green-400'
               : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
@@ -67,10 +64,9 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
         >
           Por Período
         </button>
-
         <button
           onClick={() => setFilterType('company')}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+          className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200
             ${filterType === 'company'
               ? 'bg-green-400/10 border border-green-400/20 text-green-400'
               : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
@@ -78,10 +74,9 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
         >
           Por Empresa
         </button>
-
         <button
           onClick={() => setFilterType('client')}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+          className={`px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200
             ${filterType === 'client'
               ? 'bg-green-400/10 border border-green-400/20 text-green-400'
               : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
@@ -89,38 +84,37 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
         >
           Por Cliente
         </button>
-
       </div>
 
-      {/* Inputs */}
-      <div className="flex items-center gap-3">
+      {/* Inputs + botões ação */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
 
         {filterType === 'date' && (
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+            className="w-full sm:w-auto bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
           />
         )}
 
         {filterType === 'period' && (
-          <>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+              className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             />
-            <span className="text-gray-400 text-sm">até</span>
+            <span className="text-gray-400 text-sm text-center">até</span>
             <input
               type="date"
               value={endDate}
               min={startDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors"
+              className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:border-green-400/50 transition-colors [color-scheme:dark]"
             />
-          </>
+          </div>
         )}
 
         {filterType === 'company' && (
@@ -149,19 +143,20 @@ function OrdersFilter({ onFilter }: OrdersFilterProps) {
           </div>
         )}
 
-        <button
-          onClick={handleFilter}
-          className="px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200"
-        >
-          Filtrar
-        </button>
-
-        <button
-          onClick={handleClear}
-          className="px-4 py-2 bg-white/5 border border-white/10 text-gray-400 text-sm font-medium rounded-xl hover:bg-white/10 transition-all duration-200"
-        >
-          Limpar
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleFilter}
+            className="flex-1 sm:flex-none px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200"
+          >
+            Filtrar
+          </button>
+          <button
+            onClick={handleClear}
+            className="flex-1 sm:flex-none px-4 py-2 bg-white/5 border border-white/10 text-gray-400 text-sm font-medium rounded-xl hover:bg-white/10 transition-all duration-200"
+          >
+            Limpar
+          </button>
+        </div>
 
       </div>
     </div>
