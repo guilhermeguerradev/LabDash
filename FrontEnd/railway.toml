@@ -1,0 +1,5 @@
+[build]
+buildCommand = "npx vite build"
+
+[deploy]
+startCommand = "npx serve -s dist -l $PORT"
