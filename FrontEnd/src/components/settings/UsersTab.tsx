@@ -271,12 +271,13 @@ function UsersTab() {
                             >
                               <Pencil size={16} />
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleDelete(user.id)}
                               className="text-red-400 hover:text-red-300 transition-colors"
                             >
                               <Trash2 size={16} />
-                            </button>
+                            </button> */}
+                            
                           </div>
                         </td>
                       </tr>
