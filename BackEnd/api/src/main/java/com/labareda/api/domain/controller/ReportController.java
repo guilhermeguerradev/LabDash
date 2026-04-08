@@ -1,13 +1,9 @@
 package com.labareda.api.domain.controller;
 
 import com.labareda.api.domain.service.ReportService;
-import com.labareda.api.dto.report.CounterSaleReportDTO;
-import com.labareda.api.dto.report.FinancialReportDTO;
-import com.labareda.api.dto.report.OrderReportDTO;
-import com.labareda.api.dto.report.PeriodRequestDTO;
+import com.labareda.api.dto.report.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +29,12 @@ public class ReportController {
     }
 
     @GetMapping("/orders/last-7")
-    public ResponseEntity<OrderReportDTO> getLast7DaysOrders() {
+    public ResponseEntity<Last7OrdersDTO> getLast7DaysOrders() {
         return ResponseEntity.ok(reportService.getLast7DaysOrders());
     }
 
     @GetMapping("/sales/last-7")
-    public ResponseEntity<CounterSaleReportDTO> getLast7DaysCounterSales() {
+    public ResponseEntity<Last7SalesDTO> getLast7DaysCounterSales() {
         return ResponseEntity.ok(reportService.getLast7DaysCounterSales());
     }
 }

@@ -1,8 +1,6 @@
 package com.labareda.api.dto.report;
 
 import com.labareda.api.domain.model.Order;
-
-import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;

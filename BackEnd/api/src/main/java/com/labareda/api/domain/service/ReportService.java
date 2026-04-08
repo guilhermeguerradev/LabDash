@@ -2,6 +2,7 @@ package com.labareda.api.domain.service;
 
 import com.labareda.api.domain.model.DailyCounterSale;
 import com.labareda.api.domain.model.Order;
+import com.labareda.api.domain.repository.OrderRepository;
 import com.labareda.api.dto.report.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,14 +10,13 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReportService {
 
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
     private final DailyCounterSaleService dailyCounterSaleService;
 
     // relatorio por periodo de orders
@@ -61,15 +61,27 @@ public class ReportService {
         return FinancialReportDTO.fromEntity(dto.startDate(), dto.endDate(), totalDays,totalOrders,totalSales,totalRevenue);
     }
 
-    public OrderReportDTO getLast7DaysOrders() {
+    public Last7OrdersDTO getLast7DaysOrders() {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(6);
-        return createOrderReport(new PeriodRequestDTO(startDate, endDate));
+
+        List<DailyTotalDTO> dailyTotals = orderRepository.findDailyTotals(startDate, endDate)
+                .stream()
+                .map(row -> new DailyTotalDTO((LocalDate) row[0], (BigDecimal) row[1]))
+                .toList();
+
+        return new Last7OrdersDTO(startDate, endDate, dailyTotals.size(), dailyTotals);
     }
 
-    public CounterSaleReportDTO getLast7DaysCounterSales() {
+    public Last7SalesDTO getLast7DaysCounterSales() {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(6);
-        return createSaleReport(new PeriodRequestDTO(startDate, endDate));
+
+        List<DailyTotalDTO> dailyTotals = dailyCounterSaleService.findByPeriod(startDate, endDate)
+                .stream().sorted((a,b) -> a.getDate().compareTo(b.getDate()))
+                .map(s->new DailyTotalDTO(s.getDate(), s.getTotalDay()))
+                .toList();
+
+        return new Last7SalesDTO(startDate,endDate,dailyTotals.size(),dailyTotals);
     }
 }
