@@ -136,10 +136,10 @@ function UsersTab() {
   }
 
   return (
-    <div className="flex gap-8 items-start">
+    <div className="flex flex-col lg:flex-row gap-8 items-start">
 
       {/* Formulário de criação */}
-      <div className="w-80 shrink-0">
+      <div className="w-full lg:w-80 lg:shrink-0">
         <p className="text-gray-400 text-sm mb-6">Cadastre novos usuários no sistema.</p>
 
         <div className="space-y-4">
@@ -220,71 +220,74 @@ function UsersTab() {
 
       {/* Tabela */}
       {isAdmin && (
-        <div className="flex-1">
+        <div className="w-full lg:flex-1">
           <p className="text-gray-400 text-sm mb-6">Usuários cadastrados no sistema.</p>
 
           {isLoading ? (
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-48 animate-pulse" />
           ) : (
             <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left px-6 py-4 text-gray-400 font-medium">ID</th>
-                    <th className="text-left px-6 py-4 text-gray-400 font-medium">Nome</th>
-                    <th className="text-left px-6 py-4 text-gray-400 font-medium">E-mail</th>
-                    <th className="text-left px-6 py-4 text-gray-400 font-medium">Perfil</th>
-                    <th className="text-right px-6 py-4 text-gray-400 font-medium">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="text-center text-gray-400 py-8">
-                        Nenhum usuário encontrado.
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium">ID</th>
+                      <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium">Nome</th>
+                      <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium hidden sm:table-cell">E-mail</th>
+                      <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium">Perfil</th>
+                      <th className="text-right px-4 sm:px-6 py-4 text-gray-400 font-medium">Ações</th>
                     </tr>
-                  ) : (
-                    users.map((user) => (
-                      <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-4 text-gray-400">{user.id}</td>
-                        <td className="px-6 py-4 text-white">{user.name}</td>
-                        <td className="px-6 py-4 text-gray-400">{user.email}</td>
-                        <td className="px-6 py-4">
-                          {user.role === 'ADMIN' ? (
-                            <span className="flex items-center gap-1.5 text-yellow-400 text-xs font-medium">
-                              <Shield size={13} />
-                              Administrador
-                            </span>
-                          ) : (
-                            <span className="flex items-center gap-1.5 text-gray-400 text-xs font-medium">
-                              <User size={13} />
-                              Usuário
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-3">
-                            <button
-                              onClick={() => handleOpenEdit(user)}
-                              className="text-blue-400 hover:text-blue-300 transition-colors"
-                            >
-                              <Pencil size={16} />
-                            </button>
-                            {/* <button
-                              onClick={() => handleDelete(user.id)}
-                              className="text-red-400 hover:text-red-300 transition-colors"
-                            >
-                              <Trash2 size={16} />
-                            </button> */}
-                            
-                          </div>
+                  </thead>
+                  <tbody>
+                    {users.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="text-center text-gray-400 py-8">
+                          Nenhum usuário encontrado.
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      users.map((user) => (
+                        <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                          <td className="px-4 sm:px-6 py-4 text-gray-400">{user.id}</td>
+                          <td className="px-4 sm:px-6 py-4 text-white">{user.name}</td>
+                          <td className="px-4 sm:px-6 py-4 text-gray-400 hidden sm:table-cell">{user.email}</td>
+                          <td className="px-4 sm:px-6 py-4">
+                            {user.role === 'ADMIN' ? (
+                              <span className="flex items-center gap-1.5 text-yellow-400 text-xs font-medium">
+                                <Shield size={13} />
+                                <span className="hidden sm:inline">Administrador</span>
+                                <span className="sm:hidden">Admin</span>
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1.5 text-gray-400 text-xs font-medium">
+                                <User size={13} />
+                                <span className="hidden sm:inline">Usuário</span>
+                                <span className="sm:hidden">User</span>
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 sm:px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-3">
+                              <button
+                                onClick={() => handleOpenEdit(user)}
+                                className="text-blue-400 hover:text-blue-300 transition-colors"
+                              >
+                                <Pencil size={16} />
+                              </button>
+                              {/* <button
+                                onClick={() => handleDelete(user.id)}
+                                className="text-red-400 hover:text-red-300 transition-colors"
+                              >
+                                <Trash2 size={16} />
+                              </button> */}
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
@@ -292,9 +295,9 @@ function UsersTab() {
 
       {/* Modal de edição */}
       {editingUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleCloseEdit} />
-          <div className="relative z-10 w-full max-w-md bg-[#0a0f1e] border border-white/10 rounded-2xl p-6 shadow-2xl">
+          <div className="relative z-10 w-full sm:max-w-md bg-[#0a0f1e] border border-white/10 rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-white font-semibold text-lg">Editar Usuário</h2>
               <button onClick={handleCloseEdit} className="text-gray-400 hover:text-white transition-colors">

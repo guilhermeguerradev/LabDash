@@ -109,11 +109,11 @@ function CompaniesTab() {
   return (
     <>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <p className="text-gray-400 text-sm">Gerencie as empresas e obras cadastradas.</p>
         <button
           onClick={handleOpenCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-green-400/10 border border-green-400/20 text-green-400 text-sm font-medium rounded-xl hover:bg-green-400/20 transition-all duration-200 w-full sm:w-auto"
         >
           <Plus size={16} />
           Nova Empresa
@@ -125,55 +125,57 @@ function CompaniesTab() {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-48 animate-pulse" />
       ) : (
         <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left px-6 py-4 text-gray-400 font-medium">ID</th>
-                <th className="text-left px-6 py-4 text-gray-400 font-medium">Nome</th>
-                <th className="text-right px-6 py-4 text-gray-400 font-medium">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {companies.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="text-center text-gray-400 py-8">
-                    Nenhuma empresa cadastrada.
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium">ID</th>
+                  <th className="text-left px-4 sm:px-6 py-4 text-gray-400 font-medium">Nome</th>
+                  <th className="text-right px-4 sm:px-6 py-4 text-gray-400 font-medium">Ações</th>
                 </tr>
-              ) : (
-                [...companies].sort((a, b) => a.id - b.id).map((company) => (
-                  <tr key={company.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-4 text-gray-400">{company.id}</td>
-                    <td className="px-6 py-4 text-white">{company.name}</td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <button
-                          onClick={() => handleOpenEdit(company)}
-                          className="text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(company)}
-                          className="text-red-400 hover:text-red-300 transition-colors"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+              </thead>
+              <tbody>
+                {companies.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="text-center text-gray-400 py-8">
+                      Nenhuma empresa cadastrada.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  [...companies].sort((a, b) => a.id - b.id).map((company) => (
+                    <tr key={company.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="px-4 sm:px-6 py-4 text-gray-400">{company.id}</td>
+                      <td className="px-4 sm:px-6 py-4 text-white">{company.name}</td>
+                      <td className="px-4 sm:px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => handleOpenEdit(company)}
+                            className="text-blue-400 hover:text-blue-300 transition-colors"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(company)}
+                            className="text-red-400 hover:text-red-300 transition-colors"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* Modal criar/editar */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose} />
-          <div className="relative z-10 w-full max-w-md bg-[#0a0f1e] border border-white/10 rounded-2xl p-6 shadow-2xl">
+          <div className="relative z-10 w-full sm:max-w-md bg-[#0a0f1e] border border-white/10 rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-white font-semibold text-lg">
                 {isEditing ? 'Editar Empresa' : 'Nova Empresa'}
@@ -221,10 +223,9 @@ function CompaniesTab() {
 
       {/* Modal de confirmação de delete */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleCancelDelete} />
-          <div className="relative z-10 w-full max-w-md bg-[#0a0f1e] border border-white/10 rounded-2xl p-6 shadow-2xl">
-
+          <div className="relative z-10 w-full sm:max-w-md bg-[#0a0f1e] border border-white/10 rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center shrink-0">
                 <AlertTriangle size={20} className="text-red-400" />
@@ -247,7 +248,6 @@ function CompaniesTab() {
               >
                 {isDeleting ? 'Deletando...' : 'Deletar empresa e todas as entregas vinculadas'}
               </button>
-
               <button
                 onClick={() => handleDelete(false)}
                 disabled={isDeleting}
@@ -255,7 +255,6 @@ function CompaniesTab() {
               >
                 Deletar apenas a empresa
               </button>
-
               <button
                 onClick={handleCancelDelete}
                 disabled={isDeleting}
@@ -264,7 +263,6 @@ function CompaniesTab() {
                 Cancelar
               </button>
             </div>
-
           </div>
         </div>
       )}
