@@ -122,7 +122,6 @@ function DashboardPage() {
         title="Vendas Balcão — Últimos 7 dias"
         endpoint="/reports/sales/last-7"
         color="#c084fc"
-        dataKey="totalDay"
       />
 
       {/* Modal */}

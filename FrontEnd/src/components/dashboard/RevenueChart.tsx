@@ -6,20 +6,32 @@ interface RevenueChartProps {
   title: string
   endpoint: string
   color: string
-  dataKey?: string
 }
 
-function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: RevenueChartProps) {
-  const [chartData, setChartData] = useState<{ date: string; totalValue: number }[]>([])
+interface ChartPoint {
+  date: string
+  totalValue: number
+}
+
+function formatToBR(date: string): string {
+  const [year, month, day] = date.split('-')
+  return `${day}/${month}/${year}`
+}
+
+function RevenueChart({ title, endpoint, color }: RevenueChartProps) {
+  const [chartData, setChartData] = useState<ChartPoint[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
       const response = await api.get(endpoint)
-      if (response.data.orders) setChartData(response.data.orders)
-      else if (response.data.sales) setChartData(response.data.sales)
-      else setChartData([])
+
+      let raw: ChartPoint[] = []
+      if (response.data.orders) raw = response.data.orders
+      else if (response.data.sales) raw = response.data.sales
+
+      setChartData(raw.map(item => ({ ...item, date: formatToBR(item.date) })))
     } catch (error) {
       console.error('Erro ao buscar dados do gráfico:', error)
       setChartData([])
@@ -50,12 +62,13 @@ function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: Revenu
             tick={{ fill: '#9ca3af', fontSize: 11 }}
             axisLine={false}
             tickLine={false}
+            tickMargin={10}
           />
           <YAxis
             tick={{ fill: '#9ca3af', fontSize: 11 }}
             axisLine={false}
             tickLine={false}
-            width={70}
+            width={90}
             tickFormatter={(value) =>
               value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
             }
@@ -70,12 +83,12 @@ function RevenueChart({ title, endpoint, color, dataKey = 'totalValue' }: Revenu
             }}
             formatter={(value) => [
               Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-              'Total'
+              'Total',
             ]}
           />
           <Line
             type="monotone"
-            dataKey={dataKey}
+            dataKey="totalValue"
             stroke={color}
             strokeWidth={2}
             dot={{ fill: color, r: 4 }}
