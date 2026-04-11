@@ -26,7 +26,8 @@ function LoginPage() {
 
   const {
     register,      
-    handleSubmit, 
+    handleSubmit,
+    setValue,
     formState: { errors, isSubmitting }, 
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema), 
@@ -43,7 +44,6 @@ function LoginPage() {
         setError('Email ou senha inválidos')                 
     }
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050818] relative overflow-hidden">
@@ -90,10 +90,22 @@ function LoginPage() {
             )}
 
             <button
-            type="submit"
-            disabled={isSubmitting}
-             className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-base transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-base transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {isSubmitting ? 'Entrando...' : 'Login'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setValue('email', 'admin@labareda.com');
+                setValue('password', 'admin123');
+              }}
+              className="w-full py-2.5 rounded-xl border border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 text-blue-400 text-sm font-medium transition-all duration-200 hover:border-blue-500/50"
+            >
+              🚀 Entrar como demonstração
             </button>
           </form>
         </LoginCard>
