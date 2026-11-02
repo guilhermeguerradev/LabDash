@@ -1,5 +1,8 @@
 package com.labareda.api.domain.service;
 
+import com.labareda.api.exception.ConflictException;
+import com.labareda.api.exception.ResourceNotFoundException;
+
 import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.repository.ClientRepository;
 import com.labareda.api.domain.repository.OrderRepository;
@@ -21,7 +24,7 @@ public class ClientService {
     @Transactional
     public Client save(ClientRequestDTO dto) {
         clientRepository.findByNameIgnoreCase(dto.name())
-                .ifPresent(c -> { throw new RuntimeException("Cliente já cadastrado"); });
+                .ifPresent(c -> { throw new ConflictException("Cliente já cadastrado"); });
 
         Client client = new Client();
         client.setName(dto.name());
@@ -35,13 +38,13 @@ public class ClientService {
 
     public Client findByIdOrThrow(Long id) {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
     }
 
     @Transactional
     public Client update(Long id, ClientRequestDTO dto) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
 
         client.setName(dto.name());
         client.setUnitPrice(dto.unitPrice());

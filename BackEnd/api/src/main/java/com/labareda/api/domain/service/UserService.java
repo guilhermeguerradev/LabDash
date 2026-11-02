@@ -1,5 +1,7 @@
 package com.labareda.api.domain.service;
 
+import com.labareda.api.exception.ResourceNotFoundException;
+
 import com.labareda.api.domain.model.User;
 import com.labareda.api.domain.repository.UserRepository;
 
@@ -24,13 +26,13 @@ public class UserService {
 
     public User findByIdOrThrow(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
 
     public Void delete(Long id) {
         if(!userRepository.existsById(id)) {
-            throw new RuntimeException("ID inválido");
+            throw new ResourceNotFoundException("Usuário não encontrado");
         }
         userRepository.deleteById(id);
         return null;

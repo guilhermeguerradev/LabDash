@@ -1,5 +1,8 @@
 package com.labareda.api.domain.service;
 
+import com.labareda.api.exception.ConflictException;
+import com.labareda.api.exception.ResourceNotFoundException;
+
 import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.model.Company;
 import com.labareda.api.domain.repository.CompanyRepository;
@@ -21,7 +24,7 @@ public class CompanyService {
     @Transactional
     public Company save(CompanyRequestDTO dto) {
         companyRepository.findByNameIgnoreCase(dto.name())
-                .ifPresent(c -> { throw new RuntimeException("Empresa já cadastrada"); });
+                .ifPresent(c -> { throw new ConflictException("Empresa já cadastrada"); });
 
         Company company = new Company();
         company.setName(dto.name());
@@ -37,7 +40,7 @@ public class CompanyService {
     public Company update(Long id, CompanyRequestDTO dto) {
 
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
 
         company.setName(dto.name());
 
@@ -50,7 +53,7 @@ public class CompanyService {
 
     public Company findByIdOrThrow(Long id) {
         return companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
     }
 
     @Transactional

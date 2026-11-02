@@ -1,5 +1,7 @@
 package com.labareda.api.domain.service;
 
+import com.labareda.api.exception.ResourceNotFoundException;
+
 import com.labareda.api.domain.model.Client;
 import com.labareda.api.domain.model.Company;
 import com.labareda.api.domain.model.Order;
@@ -44,7 +46,7 @@ public class OrderService {
 
     public Order findByIdOrThrow(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
     }
 
     public List<Order> findAll() {
@@ -88,7 +90,7 @@ public class OrderService {
     @Transactional
     public void delete(Long id) {
         if(!orderRepository.existsById(id)) {
-            throw new RuntimeException("order not found!");
+            throw new ResourceNotFoundException("Pedido não encontrado");
         }
         orderRepository.deleteById(id);
     }
