@@ -1,6 +1,6 @@
 package com.labareda.api.domain.service;
 
-
+import com.labareda.api.exception.ConflictException;
 import com.labareda.api.domain.model.User;
 import com.labareda.api.domain.repository.UserRepository;
 import com.labareda.api.dto.auth.AuthRequestDTO;
@@ -36,7 +36,7 @@ public class AuthService {
     @Transactional
     public void register(UserRequestDTO dto) {
         if (userRepository.findByEmail(dto.email()) != null) {
-            throw new RuntimeException("Email ja cadastrado!");
+            throw new ConflictException("E-mail já cadastrado");
         }
 
         String hashedPassword = passwordEncoder.encode(dto.password());

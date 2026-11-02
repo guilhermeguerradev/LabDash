@@ -1,6 +1,7 @@
 package com.labareda.api.domain.service;
 
-
+import com.labareda.api.exception.ConflictException;
+import com.labareda.api.exception.ResourceNotFoundException;
 import com.labareda.api.domain.model.DailyCounterSale;
 import com.labareda.api.domain.repository.DailyCounterSaleRepository;
 import com.labareda.api.dto.dailyCounterSale.DailyCounterSaleRequestDTO;
@@ -21,7 +22,7 @@ public class DailyCounterSaleService {
     public DailyCounterSale save(DailyCounterSaleRequestDTO dto) {
 
         repository.findByDate(dto.date())
-                .ifPresent(c -> { throw new RuntimeException("Venda já cadastrada!");});
+                .ifPresent(c -> { throw new ConflictException("Já existe uma venda cadastrada nessa data");});
 
         DailyCounterSale sale  = new DailyCounterSale();
 
@@ -39,12 +40,12 @@ public class DailyCounterSaleService {
 
     public DailyCounterSale findByIdOrThrow(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada"));
     }
 
     public DailyCounterSale findByDate(LocalDate date) {
         return repository.findByDate(date)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Venda não encontrada"));
     }
 
     public List<DailyCounterSale> findByPeriod(LocalDate startDate, LocalDate endDate) {
@@ -64,7 +65,7 @@ public class DailyCounterSaleService {
 
     public void delete(Long id) {
         if(!repository.existsById(id)) {
-            throw new RuntimeException("Venda não encontrada!");
+            throw new ResourceNotFoundException("Venda não encontrada");
         }
         repository.deleteById(id);
     }
